@@ -1,26 +1,32 @@
 #!/usr/bin/python3
-"""This module defines a class State that inherits from BaseModel"""
+"""This is the state class"""
 from models.base_model import BaseModel, Base
-from sqlalchemy import Column, String
+from sqlalchemy import Column, String, ForeignKey
 from sqlalchemy.orm import relationship
-from os import getenv
+from os import environ as env
+import models
 
 
 class State(BaseModel, Base):
-    """This class defines a State and its attributes"""
+    """This is the class for State
+    Attributes:
+        __tablename__: table name
+        name: input name
+        cities: relation to cities table
+    """
     __tablename__ = "states"
     name = Column(String(128), nullable=False)
     
-    if getenv("HBNB_TYPE_STORAGE") == "db":
-        cities = relationship("City", backref="state", cascade="all, delete-orphan",
-                              passive_deletes=True)
+    if env.get('HBNB_TYPE_STORAGE') == 'db':
+        cities = relationship("City", cascade="all, delete", backref="state")
     else:
         @property
         def cities(self):
-            """Return the list of City instances with state_id equal to the current State.id"""
-            cities_list = []
-            all_cities = models.storage.all(models.City)
-            for city in all_cities.values():
-                if city.state_id == self.id:
-                    cities_list.append(city)
-            return cities_list
+            """get all cities with the current state id
+            from file storage
+            """
+            l = [
+                v for k, v in models.storage.all(models.City).items()
+                if v.state_id == self.id
+            ]
+            return l
