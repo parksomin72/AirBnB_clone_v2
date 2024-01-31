@@ -15,7 +15,7 @@ from os import environ as env
 class DBStorage:
     """This class serializes instances for database storage
     Attributes:
-        __engine: engine to connect db
+        __engine: engin to connect db
         __session: session to interact with db
         __clsdict: dictionary of all classes
     """
