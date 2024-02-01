@@ -13,8 +13,9 @@ sudo mkdir -p /data/web_static/current/
 # Create a fake HTML file
 echo -e "<html>\n  <head>\n  </head>\n  <body>\n    Holberton School\n  </body>\n</html>" | sudo tee /data/web_static/releases/test/index.html > /dev/null
 
-# Create a symbolic link
+# Create a symbolic link with correct ownership
 sudo ln -sf /data/web_static/releases/test/ /data/web_static/current
+sudo chown -h ubuntu:ubuntu /data/web_static/current
 
 # Give ownership of the /data/ folder to the ubuntu user and group
 sudo chown -R ubuntu:ubuntu /data/
